@@ -10,7 +10,7 @@ import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import HeadsetIcon from '@material-ui/icons/Headset';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Avatar } from '@material-ui/core';
-import { InfoOutlined, Mic } from '@material-ui/icons';
+import { InfoOutlined } from '@material-ui/icons';
 
 function Sidebar() {
   return (
