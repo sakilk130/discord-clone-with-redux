@@ -9,12 +9,12 @@ import SendIcon from '@material-ui/icons/Send';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { IconButton } from '@material-ui/core';
 
-function ChatHeader() {
+function ChatHeader({ channelName }) {
   return (
     <div className="chatHeader">
       <div className="chatHeader__left">
         <h3>
-          <span className="chatHeader_hash">#</span> Channel Name
+          <span className="chatHeader_hash">#</span> {channelName}
         </h3>
       </div>
       <div className="chatHeader__right">

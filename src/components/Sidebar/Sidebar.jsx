@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Sidebar.css';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AddIcon from '@material-ui/icons/Add';
@@ -13,28 +13,84 @@ import { Avatar } from '@material-ui/core';
 import { InfoOutlined } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/counter/userSlice';
-import { auth } from '../../firebase/config';
+import db, { auth } from '../../firebase/config';
+import ContentLoader from 'react-content-loader';
 
 function Sidebar() {
   const user = useSelector(selectUser);
+  const [channels, setChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    db.collection('channels').onSnapshot((snapshot) =>
+      setChannels(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          channel: doc.data(),
+        }))
+      )
+    );
+    setLoading(false);
+  }, []);
+
+  const handleAddChannel = () => {
+    const channelName = prompt('Enter a channel Name');
+    if (channelName) {
+      db.collection('channels').add({
+        channelName,
+      });
+    } else {
+      alert('Please enter channel name');
+    }
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar__top">
-        <h3>Sakil Khan</h3>
+        <h3>Channels</h3>
         <ExpandMoreIcon />
       </div>
       <div className="sidebar__channels">
         <div className="sidebar__channelsHeader">
           <div className="sidebar__header">
             <ExpandMoreIcon />
-            <h3>Test</h3>
+            <h3>Create Channel</h3>
           </div>
-          <AddIcon className="sidebar__addChannel" />
+          <AddIcon onClick={handleAddChannel} className="sidebar__addChannel" />
         </div>
         <div className="sidebar__channelsLIst">
-          <SidebarChannel />
-          <SidebarChannel />
-          <SidebarChannel />
+          {loading ? (
+            <ContentLoader
+              style={{ padding: '20px' }}
+              speed={2}
+              width={400}
+              height={160}
+              viewBox="0 0 400 160"
+              backgroundColor="#fffff"
+              foregroundColor="#ecebeb"
+            >
+              <rect x="48" y="8" rx="3" ry="3" width="88" height="6" />
+              <rect x="48" y="26" rx="3" ry="3" width="52" height="6" />
+              <circle cx="20" cy="20" r="20" />
+              <rect x="51" y="62" rx="3" ry="3" width="88" height="6" />
+              <rect x="51" y="80" rx="3" ry="3" width="52" height="6" />
+              <circle cx="23" cy="74" r="20" />
+              <rect x="53" y="116" rx="3" ry="3" width="88" height="6" />
+              <rect x="53" y="134" rx="3" ry="3" width="52" height="6" />
+              <circle cx="25" cy="128" r="20" />
+              <rect x="56" y="170" rx="3" ry="3" width="88" height="6" />
+              <rect x="56" y="188" rx="3" ry="3" width="52" height="6" />
+              <circle cx="28" cy="182" r="20" />
+            </ContentLoader>
+          ) : (
+            channels.map(({ id, channel }) => (
+              <SidebarChannel
+                key={id}
+                id={id}
+                channelName={channel.channelName}
+              />
+            ))
+          )}
         </div>
       </div>
       <div className="sidebar__voice">
