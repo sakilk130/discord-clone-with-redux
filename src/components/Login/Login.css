@@ -1,0 +1,22 @@
+.login {
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+.login > button {
+  width: 300px;
+  color: white;
+  font-weight: 800;
+  background-color: #738adb;
+}
+
+.login > button:hover {
+  background-color: black;
+  background-color: #738adb;
+}
+.login > div > img {
+  object-fit: contain;
+  height: 150px;
+}
